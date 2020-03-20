@@ -54,9 +54,9 @@ router.delete('/:id', async (req, res) =>{
     }) 
 });
 
+//parte postman
 
-
-router.get('/customer/rentals', async(req, res)=> {
+router.get('/rentas', async(req, res)=> {
     const colle = listingsandreviews.collection.collectionName;
     console.log(colle);
     console.log(listingsandreviews);
@@ -71,7 +71,7 @@ router.get('/customer/rentals', async(req, res)=> {
     res.json(look);
 });
 
-router.post('/lolo', async(req,res)=>{
+router.post('/insertar', async(req,res)=>{
         const newListing = new listingsandreviews ({
         name: req.body.name,
         description: req.body.description,
@@ -87,7 +87,7 @@ router.post('/lolo', async(req,res)=>{
     });
 });
 
-router.get('/lolo', async(req,res)=>{
+router.get('/busqueda', async(req,res)=>{
     const constListings = await listingsandreviews.find({});
     res.json(constListings);
 });
