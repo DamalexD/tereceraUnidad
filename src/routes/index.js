@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const customer = require('../models/Customers');
 
+router.get('/', (req, res) =>{
+    res.render('index');
+});
+
+
 router.get('/', async (req, res) =>{
     const datos = await customer.find({});
     res.json(datos);
