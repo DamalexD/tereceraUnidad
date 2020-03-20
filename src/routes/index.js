@@ -3,31 +3,17 @@ const router = express.Router();
 const customer = require('../models/Customers');
 const listingsandreviews = require('../models/listingsandreviews');
 
-router.get('/', (req, res) =>{
-    res.render('index');
-});
 
 
 router.get('/', async (req, res) =>{
-    const datos = await customer.find({});
-    res.json(datos);
+    const customers = await customer.find();
+    res.render('index', {customers});
 });
 
-router.post('/', async (req, res) =>{
-    const newCustomer = new customer({
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        address: req.body.address,
-        city: req.body.city,
-        country: req.body.country,
-        district: req.body.district,
-        status: req.body.status
-    });
-    await newCustomer.save();
-
-    res.json({
-        status: "Customer añadido"
-    })
+router.post('/add', async (req, res) =>{
+    const customers = new customer(req.body);
+    await customers.save();
+    res.redirect('/');
 });
 
 router.put('/:id', async (req, res) =>{
@@ -78,7 +64,6 @@ router.post('/lolo', async(req,res)=>{
         price: req.body.price,
         property_type: req.body.property_type,
         idCustomer: req.body.idCustomer
-
     });
     await newListing.save();
 
@@ -107,6 +92,19 @@ router.get('/precios', async(req,res)=>{
     res.json(precios);
 });
 
+
+router.get('/activo', async(req, res) => {
+    const customers = await customer.find();
+    console.log(customers);
+    res.render('index', { customers });
+});
+
+router.put('/NuevoAct/:id', async(req, res) => {
+    const { status } = req.body;
+    await customer.findByIdAndUpdate(req.params.id, { status });
+    req.flash('success_msg', 'Customer Actualizado');
+    res.redirect('/customer');
+});
 
 
 
