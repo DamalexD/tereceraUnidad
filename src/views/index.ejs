@@ -39,7 +39,6 @@
             </form>
         </div>
 
-        
 
         <div>
             <table class="table table-bordered">
@@ -68,6 +67,12 @@
                     <th>
                         Status
                     </th>
+                    <th>
+                        Edit
+                    </th>
+                    <th>
+                        Delete
+                    </th>
                 </tr>
                 <tbody>
                     <% for(let i = 0; i<customers.length; i++){ %>
@@ -94,7 +99,13 @@
                                 <%= customers[i].district %>
                             </td>
                             <td>
-                                <%= customers[i].status %>
+                                <a href="/edit/status/<%= customers[i]._id %>" class="btn btn-primary"><%= customers[i].status %></a>
+                            </td>
+                            <td>
+                                <a href="edit/<%= customers[i]._id %>" class="btn btn-primary">Edit</a>
+                            </td>
+                            <td>
+                                <a href="/delete/<%= customers[i]._id %>" class="btn btn-danger">Delete</a>
                             </td>
                         </tr>
                     <% } %>

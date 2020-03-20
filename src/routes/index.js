@@ -4,41 +4,52 @@ const customer = require('../models/Customers');
 const listingsandreviews = require('../models/listingsandreviews');
 
 
-
+//all
 router.get('/', async (req, res) =>{
     const customers = await customer.find();
     res.render('index', {customers});
 });
 
+//insert
 router.post('/add', async (req, res) =>{
     const customers = new customer(req.body);
     await customers.save();
     res.redirect('/');
 });
 
-router.put('/:id', async (req, res) =>{
+//edit
+router.get('/edit/:id', async (req, res) => {
     const {id} = req.params;
-    const updateCus = {
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        address: req.body.address,
-        city: req.body.city,
-        country: req.body.country,
-        district: req.body.district,
-        status: req.body.status
-    }
-    await customer.findByIdAndUpdate(id, {$set : updateCus}, {new : true});
-    res.json({
-        status : "Customer actualizado"
-    })
+    const customers = await customer.findById(id);
+    res.render('edit', {customers});
 });
 
-router.delete('/:id', async (req, res) =>{
-    await customer.findByIdAndRemove(req.params.id);
-    res.json({
-        status : "Customer eliminado"
-    }) 
+//updateBy ID
+router.post('/update/:id', async (req, res) => {
+    const {id} = req.params;
+    await customer.updateOne({'_id' : id}, req.body);
+    res.redirect('/');
 });
+
+//deleteBy ID
+router.get('/delete/:id', async (req, res) =>{
+    const {id} = req.params;
+    await customer.remove({'_id' : id});
+    res.redirect('/'); 
+});
+
+//edit status
+router.post('/edit/activo/:id', async(req, res) => {
+    const {id} = req.params;
+    await customer.updateOne({'_id' : id}, req.body);
+    res.redirect('/');
+})
+router.get('/edit/status/:id', async (req, res) => {
+    const {id} = req.params;
+    const customers = await customer.findById(id);
+    res.render('status', {customers});
+});
+
 
 //parte postman
 
@@ -105,11 +116,6 @@ router.put('/NuevoAct/:id', async(req, res) => {
     req.flash('success_msg', 'Customer Actualizado');
     res.redirect('/customer');
 });
-
-
-
-
-
 
 
 module.exports = router;
